@@ -1,0 +1,7 @@
+{
+  "name": "LibretaMilitar",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

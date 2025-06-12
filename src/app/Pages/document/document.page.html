@@ -1,0 +1,108 @@
+<ion-header mode="ios">
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ tipo }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="light">
+    <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterDocuments($event)"
+      placeholder="Buscar..."></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+  <p *ngIf="filteredListData?.length === 0" class="ion-text-center" style="padding: 15px">
+    No se encontraron resultados. Puedes agregar uno nuevo registrándolo.
+    Presiona el botón en la parte inferior con el ícono ➕.
+    <br /><br />
+    <ion-button (click)="addDocument()" color="success">Crear nuevo</ion-button>
+  </p>
+
+  <ion-list [inset]="true">
+    <ion-item-sliding *ngFor="let item of filteredListData; trackBy: trackById">
+      <ion-item>
+        <ion-label>
+          <h2>{{ item.title }}</h2>
+
+          <p *ngIf="item.type === 'AGENDAS'">
+            📅 Fecha: {{ item.event_datetime | date: 'dd MMMM yyyy' }} - ⏰
+            Hora: {{ item.event_datetime | date: 'h:mm a' }}
+          </p>
+
+          <p>{{ item.content }}</p>
+          <p>📝 Registrado: {{ item.created_at | date: 'dd MMMM yyyy h:mm a' }}</p>
+
+<<<<<<< HEAD
+          <!-- Contenedor visual -->
+          <div
+            style="width: 100%; height: 200px; background: #eee; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; margin-top: 10px;">
+
+            <!-- Imagen incrustada -->
+            <img *ngIf="item.imageFile?.startsWith('data:image')" [src]="item.imageFile" alt="Imagen"
+              style="max-height: 100%; max-width: 100%; object-fit: cover;" />
+
+            <!-- PDF incrustado -->
+            <iframe *ngIf="item.pdfFile?.startsWith('data:application/pdf')" [src]="item.pdfFile"
+              style="width: 100%; height: 100%; border: none;"></iframe>
+
+
+            <!-- Sin archivo -->
+            <span *ngIf="!item.imageFile && !item.pdfFile" style="color: #999;">Sin archivo</span>
+
+            <!-- Archivo no soportado -->
+            <span *ngIf="(item.imageFile && !item.imageFile.startsWith('data:image')) && 
+               (item.pdfFile && !item.pdfFile.startsWith('data:application/pdf'))" style="color: #666;">Archivo
+              cargado</span>
+          </div>
+
+=======
+          <!-- Previsualización de imagen si es base64 o data:image -->
+          <div *ngIf="item.file?.startsWith('data:image')" style="margin-top: 10px;">
+            <img [src]="item.file" alt="Preview"
+              style="max-width: 100%; border-radius: 8px;" />
+          </div>
+
+          <!-- Espacio para imagen o PDF -->
+          <div
+            style="width: 100%; height: 120px; background: #eee; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; margin-top: 10px;">
+            <ng-container *ngIf="item.file">
+              <img *ngIf="item.file.startsWith('data:image')" [src]="item.file" alt="Imagen"
+                style="max-height: 100%; max-width: 100%; object-fit: cover;">
+              <ng-container *ngIf="item.file.startsWith('data:application/pdf')">
+                <ion-icon name="document-outline" size="large" color="primary"></ion-icon>
+                <span style="margin-left: 8px;">PDF adjunto</span>
+              </ng-container>
+            </ng-container>
+            <span *ngIf="!item.file" style="color: #999;">Sin archivo</span>
+          </div>
+
+          <!-- Botón para descargar PDF si existe -->
+          <ion-button *ngIf="item.file?.startsWith('data:application/pdf')" size="small" color="tertiary"
+            style="width: 160px; align-self: start; margin-top: 8px;"
+            (click)="descargarPDF(item)">
+            Descargar PDF
+          </ion-button>
+>>>>>>> f9864ea (Correccionde bugs)
+        </ion-label>
+        
+
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="primary" (click)="editDocument(item)">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="deleteDocument(item.id)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="success" (click)="addDocument()">
+      <ion-icon name="add-sharp"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

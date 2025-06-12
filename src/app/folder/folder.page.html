@@ -1,0 +1,42 @@
+<ion-content color="light">
+  <ion-card mode="ios" class="shadow-lg rounded-lg p-5 bg-white">
+    <ion-card-header class="text-center">
+      <ion-card-title class="text-2xl font-bold text-indigo-600">Libreta de Bolsillo</ion-card-title>
+      <ion-card-subtitle class="text-gray-500">Bienvenido</ion-card-subtitle>
+    </ion-card-header>
+    <p class="ion-text-center">
+      <img style="width: 50%" src="assets/soldado.png">
+    </p>
+
+    <ion-card-content>
+      <form [formGroup]="Login" (ngSubmit)="register()">
+        <ion-item class="mb-3">
+          <ion-label position="floating">Usuario</ion-label>
+          <ion-input type="text" formControlName="username"></ion-input>
+        </ion-item>
+
+        <ion-item class="mb-3">
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+
+        <div class="text-center mt-4">
+          <ion-button expand="block" (click)="login()" color="success">INGRESAR</ion-button>
+        </div>
+      </form>
+      @if (statusIntegrate == false) {
+        <div class="text-center mt-4">
+          <p class="text-gray-600 mb-2">¿No tienes cuenta?</p>
+          <ion-button expand="block" fill="clear" (click)="register()" color="success">REGISTRATE</ion-button>
+        </div>
+      }
+    </ion-card-content>
+  </ion-card>
+  @if (statusIntegrate == true) {
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button color="success" (click)="checkBiometricAvailability()">
+        <ion-icon name="logo-tableau"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
+</ion-content>

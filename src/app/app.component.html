@@ -1,0 +1,54 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu [style.background]="colorMenu" contentId="main-content" type="overlay">
+      <ion-card class="menu-header-card">
+        <ion-card-header>
+          <ion-card-title class="ion-text-center">Menú</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="image-container">
+          <img class="profile-img" src="assets/soldado.png" />
+        </ion-card-content>
+      </ion-card>
+
+      <ion-content class="ion-padding" mode="ios">
+        <ion-list id="inbox-list" lines="none">
+          <ion-menu-toggle auto-hide="false">
+
+            <!-- INICIO -->
+            <ion-item button (click)="home()" routerLinkActive="selected" class="menu-item">
+              <ion-icon name="home-outline" slot="start"></ion-icon>
+              <ion-label>Inicio</ion-label>
+            </ion-item>
+
+            <!-- PERFIL -->
+            <ion-item button (click)="togglePerfil()" class="menu-item">
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <ion-label>Perfil</ion-label>
+            </ion-item>
+
+            <ion-card-content *ngIf="showPerfil" class="perfil-extra">
+              <p><b>Nombre:</b> Juan Pérez</p>
+              <p><b>Rango:</b> Capitán</p>
+              <p><b>Email:</b> juan.perez&#64;emi.edu.bo</p>
+            </ion-card-content>
+
+            <!-- SALIR -->
+            <ion-item button (click)="salir()" class="menu-item">
+              <ion-icon name="log-out-outline" slot="start"></ion-icon>
+              <ion-label>Salir</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+
+      <ion-card-content class="image-container">
+        <p class="copyright-text">
+          © Escuela Militar de Ingeniería EMI. Todos los derechos reservados.
+        </p>
+      </ion-card-content>
+
+    </ion-menu>
+
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

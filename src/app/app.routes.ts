@@ -36,12 +36,13 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'add-document/:id/:data', // Página que permite agregar documentos, pasando id y tipo
+    path: 'add-document/:tipo/:data', // Página que permite agregar documentos, pasando id y tipo
     loadComponent: () =>
       import('./Pages/add-document/add-document.page').then(
         (m) => m.AddDocumentPage
       ),
   },
+
   {
     path: 'solo-datos',
     loadComponent: () => import('./Pages/solo-datos/solo-datos.page').then(m => m.SoloDatosPage)
@@ -50,7 +51,7 @@ export const routes: Routes = [
     path: 'documento-completo/:id',
     loadComponent: () => import('./Pages/documento-completo/documento-completo.page').then(m => m.DocumentoCompletoPage)
   },
-  
+
 
 
 ];

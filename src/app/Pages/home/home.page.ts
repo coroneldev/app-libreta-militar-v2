@@ -123,11 +123,15 @@ export class HomePage implements OnInit {
 
   public Seleccionar(tipo: string) {
     if (tipo === 'MANUALES') {
+
       if (this.isInstructor) {
-        // Ruta antigua solo para INSTRUCTOR
-        this.navCtrl.navigateForward(`/document-page/${tipo}`, { animated: true });
+        // Imprime cuando el INSTRUCTOR hace click en MANUALES
+        console.log('[INSTRUCTOR][EVENTO][MANUALES] Click Capturado');
+
+       // this.navCtrl.navigateForward(`/add-document/${tipo}`, { animated: true });
+        //this.navCtrl.navigateForward(`/document-page/MANUALES/0`, { animated: true });
+        this.navCtrl.navigateForward(`/add-document/MANUALES/0`, { animated: true });
       } else {
-        // Ruta nueva para NO INSTRUCTOR
         this.navCtrl.navigateForward(`/documento-completo/${tipo}`, { animated: true });
       }
     } else if (tipo === 'APUNTES' || tipo === 'AGENDAS') {

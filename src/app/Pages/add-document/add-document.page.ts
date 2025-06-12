@@ -14,8 +14,6 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { Subscription } from 'rxjs';
 
-
-
 @Component({
   selector: 'app-add-document',
   templateUrl: './add-document.page.html',
@@ -42,6 +40,9 @@ export class AddDocumentPage implements OnInit, OnDestroy {
 
   private routeSub?: Subscription;
 
+  imagePreview: string | null = null;
+  pdfUri: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     private navCtrl: NavController,
@@ -51,9 +52,8 @@ export class AddDocumentPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // Nos suscribimos a params para reactualizar si cambian
     this.routeSub = this.activatedRoute.params.subscribe(async (params: Params) => {
-      this.tipo = params['id'];
+      this.tipo = params['tipo'];
       this.data = params['data'];
       if (this.data !== '0') {
         await this.loadDocumentData();
@@ -64,7 +64,6 @@ export class AddDocumentPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Evitar fugas de memoria
     this.routeSub?.unsubscribe();
   }
 
@@ -91,11 +90,11 @@ export class AddDocumentPage implements OnInit, OnDestroy {
         this.initForm(data);
       } else {
         console.warn('No se encontraron datos para el ID:', this.data);
-        this.initForm(); // inicializamos vacío para evitar null refs
+        this.initForm();
       }
     } catch (error) {
       console.error('Error al cargar el documento:', error);
-      this.initForm(); // inicializamos vacío para evitar errores
+      this.initForm();
     }
   }
 
@@ -121,7 +120,9 @@ export class AddDocumentPage implements OnInit, OnDestroy {
         await this.scheduleNotification();
       }
 
-      this.navCtrl.back();
+      // Redirección correcta a la lista de este tipo:
+      this.navCtrl.navigateBack(`/documento-completo/${this.tipo}`);
+
     } catch (error) {
       console.error('Error al guardar el documento:', error);
       await this.presentToast('Ocurrió un error al guardar el documento.');
@@ -175,9 +176,6 @@ export class AddDocumentPage implements OnInit, OnDestroy {
     }
   }
 
-  imagePreview: string | null = null;
-  pdfUri: string | null = null;
-
   async onFileSelected(event: any, type: 'image' | 'pdf') {
     const file = event.target.files[0];
     if (!file) return;
@@ -186,10 +184,10 @@ export class AddDocumentPage implements OnInit, OnDestroy {
 
       if (type === 'image') {
         this.imagePreview = base64;
-        this.imageFilePath = base64;  // Opcional, para mantenerlo en el form
+        this.imageFilePath = base64;
       } else if (type === 'pdf') {
         this.pdfUri = base64;
-        this.pdfFilePath = base64; // Igual, si quieres guardar la ruta base64 en el form
+        this.pdfFilePath = base64;
       }
     } catch (error) {
       console.error('Error leyendo archivo:', error);
@@ -204,7 +202,4 @@ export class AddDocumentPage implements OnInit, OnDestroy {
       reader.readAsDataURL(file);
     });
   }
-
-
-
 }

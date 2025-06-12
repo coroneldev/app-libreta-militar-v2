@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import {
   ActionSheetController,
   IonBackButton,
@@ -48,12 +48,7 @@ import { ActivatedRoute } from "@angular/router";
     IonSearchbar
   ]
 })
-<<<<<<< HEAD
-
-export class DocumentPage implements OnInit {
-=======
 export class DocumentoCompletoPage implements OnInit {
->>>>>>> f9864ea (Correccionde bugs)
   public listData: any[] = [];
   public filteredListData: any[] = [];
   public tipo: string = "";
@@ -75,10 +70,12 @@ export class DocumentoCompletoPage implements OnInit {
 
   ngOnInit() {
     this.tipo = this.activatedRoute.snapshot.paramMap.get('tipo') as string;
+    console.log('ngOnInit - tipo:', this.tipo);
     this.listar();
   }
 
   ionViewWillEnter() {
+    console.log('ionViewWillEnter - tipo:', this.tipo);
     this.listar();
   }
 
@@ -113,8 +110,11 @@ export class DocumentoCompletoPage implements OnInit {
 
   public async listar() {
     this.listData = await this.documentService.filterDocumentsByType(this.tipo);
+    console.log('listar() - tipo:', this.tipo);
+    console.log('listar() - documentos recuperados:', this.listData);
     this.listData.sort((a, b) => b.id - a.id);
     this.filteredListData = [...this.listData];
+    console.log('listar() - documentos filtrados:', this.filteredListData);
   }
 
   public addDocument() {
@@ -136,24 +136,4 @@ export class DocumentoCompletoPage implements OnInit {
   trackById(index: number, item: any): number {
     return item.id;
   }
-<<<<<<< HEAD
-
-  public selectedFile: string | null = null;
-
-  public viewDocument(filePath: string): void {
-    const extension = filePath.split('.').pop()?.toLowerCase();
-    if (extension === 'pdf') {
-      this.selectedFile = filePath;
-    } else {
-      this.openFile(filePath);
-    }
-  }
-
-  public closeViewer(): void {
-    this.selectedFile = null;
-  }
-
 }
-=======
-}
->>>>>>> f9864ea (Correccionde bugs)

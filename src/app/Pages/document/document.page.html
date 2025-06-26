@@ -45,6 +45,7 @@
             <iframe *ngIf="item.pdfFile?.startsWith('data:application/pdf')" [src]="item.pdfFile"
               style="width: 100%; height: 100%; border: none;"></iframe>
 
+
             <!-- Sin archivo -->
             <span *ngIf="!item.imageFile && !item.pdfFile" style="color: #999;">Sin archivo</span>
 
@@ -53,7 +54,10 @@
                (item.pdfFile && !item.pdfFile.startsWith('data:application/pdf'))" style="color: #666;">Archivo
               cargado</span>
           </div>
+
         </ion-label>
+        
+
       </ion-item>
 
       <ion-item-options side="end">

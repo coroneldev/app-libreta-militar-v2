@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import {
   ActionSheetController,
   IonBackButton,
@@ -109,6 +108,7 @@ export class DocumentoCompletoPage implements OnInit {
   }
 
   public async listar() {
+    // Usamos filtro insensible a mayúsculas/minúsculas en el servicio
     this.listData = await this.documentService.filterDocumentsByType(this.tipo);
     console.log('listar() - tipo:', this.tipo);
     console.log('listar() - documentos recuperados:', this.listData);

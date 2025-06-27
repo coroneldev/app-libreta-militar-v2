@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+
 import {
   IonContent,
   IonHeader,
@@ -20,7 +22,9 @@ import {
   IonIcon,
   IonButton
 } from '@ionic/angular/standalone';
+
 import { ActivatedRoute } from '@angular/router';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 
 interface Documento {
   id: number;
@@ -29,6 +33,8 @@ interface Documento {
   content: string;
   event_datetime?: string;
   created_at: string;
+  pdfFile?: string; // si usas pdf
+  imageFile?: string; // si usas imagen
 }
 
 @Component({
@@ -55,7 +61,8 @@ interface Documento {
     IonIcon,
     IonButton,
     CommonModule,
-    FormsModule
+    FormsModule,
+    SafeUrlPipe 
   ]
 })
 export class DocumentoCompletoPage implements OnInit {
@@ -64,7 +71,7 @@ export class DocumentoCompletoPage implements OnInit {
   listData: Documento[] = [];
   filteredListData: Documento[] = [];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.tipo = this.route.snapshot.paramMap.get('tipo') ?? '';
@@ -72,26 +79,16 @@ export class DocumentoCompletoPage implements OnInit {
   }
 
   cargarDatos() {
-    // Simulación de datos. Reemplaza por tu servicio si lo tienes.
     this.listData = [
-      {
-        id: 1,
-        title: 'Apunte de clase',
-        type: 'APUNTE',
-        content: 'Contenido del apunte...',
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        title: 'Agenda semanal',
-        type: 'AGENDAS',
-        content: 'Reunión de equipo...',
-        event_datetime: new Date().toISOString(),
-        created_at: new Date().toISOString()
-      }
+      { id: 1, title: 'Apunte de clase', type: 'APUNTE', content: 'Contenido del apunte...', created_at: new Date().toISOString() },
+      { id: 2, title: 'Agenda semanal', type: 'AGENDAS', content: 'Reunión de equipo...', event_datetime: new Date().toISOString(), created_at: new Date().toISOString() },
+      { id: 3, title: 'Manual de usuario', type: 'MANUALES', content: 'Contenido del manual...', created_at: new Date().toISOString() }
     ];
-    this.filteredListData = [...this.listData];
+
+    // Filtramos solo los documentos que coincidan con el tipo de la ruta
+    this.filteredListData = this.listData.filter(doc => doc.type === this.tipo);
   }
+
 
   filterDocuments(event: any) {
     const query = event.target.value?.toLowerCase() || '';

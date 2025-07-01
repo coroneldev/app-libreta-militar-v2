@@ -21,6 +21,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Pages/home/home.page').then((m) => m.HomePage),
   },
+  
   {
     path: 'solo-datos/:tipo', // SOLO para APUNTES y AGENDAS
     loadComponent: () =>
@@ -28,6 +29,7 @@ export const routes: Routes = [
         (m) => m.SoloDatosPage
       ),
   },
+
   {
     path: 'documento-completo/:tipo', // SOLO para MANUALES (PDF, imágenes, etc)
     loadComponent: () =>

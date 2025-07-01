@@ -112,6 +112,8 @@ export class SoloDatosPage implements OnInit {
   }
 
   public addDocument() {
+    console.log('[DEBUG] Botón "Crear nuevo" presionado');
+    console.log('[DEBUG] Redirigiendo a:', `/add-document/${this.tipo}/0`);
     this.navCtrl.navigateForward(`/add-document/${this.tipo}/0`, { animated: true });
   }
 

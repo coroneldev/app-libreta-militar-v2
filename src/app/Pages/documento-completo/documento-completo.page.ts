@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-
 import {
   IonContent,
   IonHeader,
@@ -20,7 +19,9 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  IonButton
+  IonButton,
+  IonCard,
+  IonCardContent
 } from '@ionic/angular/standalone';
 
 import { ActivatedRoute } from '@angular/router';
@@ -33,7 +34,7 @@ interface Documento {
   content: string;
   event_datetime?: string;
   created_at: string;
-  pdfFile?: string; // si usas pdf
+  pdfFile?: string;   // si usas pdf
   imageFile?: string; // si usas imagen
 }
 
@@ -60,9 +61,11 @@ interface Documento {
     IonFabButton,
     IonIcon,
     IonButton,
+    IonCard,
+    IonCardContent,
     CommonModule,
     FormsModule,
-    SafeUrlPipe 
+    SafeUrlPipe
   ]
 })
 export class DocumentoCompletoPage implements OnInit {
@@ -74,8 +77,13 @@ export class DocumentoCompletoPage implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.tipo = this.route.snapshot.paramMap.get('tipo') ?? '';
-    this.cargarDatos();
+    // this.tipo = this.route.snapshot.paramMap.get('tipo') ?? '';
+    //this.tipo = this.route.snapshot.params['tipo'] ?? '';
+    //this.cargarDatos();
+    this.route.params.subscribe(params => {
+      this.tipo = params['tipo'] ?? '';
+      this.cargarDatos();
+    });
   }
 
   cargarDatos() {
@@ -88,7 +96,6 @@ export class DocumentoCompletoPage implements OnInit {
     // Filtramos solo los documentos que coincidan con el tipo de la ruta
     this.filteredListData = this.listData.filter(doc => doc.type === this.tipo);
   }
-
 
   filterDocuments(event: any) {
     const query = event.target.value?.toLowerCase() || '';
@@ -103,7 +110,7 @@ export class DocumentoCompletoPage implements OnInit {
   }
 
   addDocument() {
-    alert('Agregar nuevo documento (implementa la lógica real aquí)');
+    alert('Solo puede realizar esta accion un Instructor');
   }
 
   editDocument(item: Documento) {

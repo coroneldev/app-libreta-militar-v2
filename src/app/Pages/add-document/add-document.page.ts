@@ -51,17 +51,18 @@ export class AddDocumentPage implements OnInit, OnDestroy {
     private toastController: ToastController
   ) { }
 
-  ngOnInit() {
-    this.routeSub = this.activatedRoute.params.subscribe(async (params: Params) => {
-      this.tipo = params['tipo'];
-      this.data = params['data'];
-      if (this.data !== '0') {
-        await this.loadDocumentData();
-      } else {
-        this.initForm();
-      }
-    });
-  }
+ngOnInit() {
+  this.routeSub = this.activatedRoute.params.subscribe(async (params: Params) => {
+    this.tipo = params['tipo']?.toUpperCase() === 'AGENDAS' ? 'AGENDA' : params['tipo'];
+    this.data = params['data'];
+    if (this.data !== '0') {
+      await this.loadDocumentData();
+    } else {
+      this.initForm();
+    }
+  });
+}
+
 
   ngOnDestroy() {
     this.routeSub?.unsubscribe();

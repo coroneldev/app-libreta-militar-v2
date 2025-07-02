@@ -127,7 +127,7 @@ export class AddDocumentPage implements OnInit, OnDestroy {
         await this.scheduleNotification();
       }
       if (this.tipo === 'MANUALES') {
-        console.log('Guardado manual, redirigir a vista específica de manuales (implementación futura)');
+        console.log('Guardado manual, redirigir a vista específica de manuales');
         this.navCtrl.navigateBack(`/documento-completo/${this.tipo}`);
 
       } else {

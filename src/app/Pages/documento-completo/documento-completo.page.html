@@ -1,10 +1,22 @@
 <ion-header mode="ios">
   <ion-toolbar color="success">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <!-- Botón de retroceso con fallback por si no hay historial -->
+      <ion-back-button [defaultHref]="'/documento-completo/' + tipo"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ tipo }}</ion-title>
+    <ion-title>
+      {{
+        tipo === 'APUNTES'
+          ? 'APUNTES'
+          : tipo === 'MANUALES'
+            ? 'MANUALES'
+            : tipo === 'AGENDA'
+              ? 'AGENDA'
+              : 'DOCUMENTO'
+      }}
+    </ion-title>
   </ion-toolbar>
+
   <ion-toolbar color="light">
     <ion-searchbar
       [(ngModel)]="searchQuery"
@@ -16,14 +28,16 @@
 </ion-header>
 
 <ion-content color="light">
+  <!-- Mostrar mensaje si no hay resultados -->
   <p *ngIf="filteredListData.length === 0" class="ion-text-center" style="padding: 15px;">
     No se encontraron resultados. Puedes agregar uno nuevo registrándolo.
     <br /><br />
-    <ion-button (click)="addDocument()" color="success" expand="block">
+    <ion-button (click)="addDocument()" color="success" expand="block" *ngIf="rolUsuario !== 'ESTUDIANTE'">
       Crear nuevo
     </ion-button>
   </p>
 
+  <!-- Lista de documentos -->
   <ion-list [inset]="true">
     <ion-item-sliding *ngFor="let item of filteredListData; trackBy: trackById">
       <ion-item>
@@ -52,21 +66,22 @@
         </ion-card-content>
       </ion-card>
 
+      <!-- Opciones -->
       <ion-item-options side="end">
-        <ion-item-option color="primary" (click)="editDocument(item)">
+        <ion-item-option color="primary" (click)="editDocument(item)" *ngIf="rolUsuario !== 'ESTUDIANTE'">
           <ion-icon slot="icon-only" name="create-outline"></ion-icon>
         </ion-item-option>
-        <ion-item-option color="danger" (click)="deleteDocument(item.id)">
+        <ion-item-option color="danger" (click)="deleteDocument(item.id)" *ngIf="rolUsuario !== 'ESTUDIANTE'">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <!-- Botón flotante para agregar nuevo documento -->
+  <ion-fab *ngIf="rolUsuario !== 'ESTUDIANTE'" slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="success" (click)="addDocument()">
       <ion-icon name="add-sharp"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  
 </ion-content>

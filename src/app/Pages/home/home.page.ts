@@ -124,16 +124,18 @@ export class HomePage implements OnInit {
   public Seleccionar(tipo: string) {
     if (tipo === 'MANUALES') {
       if (this.isInstructor) {
-        // Imprime cuando el INSTRUCTOR hace click en MANUALES
         console.log('[INSTRUCTOR][EVENTO][MANUALES] Click Capturado');
-        // this.navCtrl.navigateForward(`/add-document/${tipo}`, { animated: true });
-        //this.navCtrl.navigateForward(`/document-page/MANUALES/0`, { animated: true });
         this.navCtrl.navigateForward(`/add-document/MANUALES/0`, { animated: true });
       } else {
+        console.log(`[ESTUDIANTE][REDIRECCIÓN] /documento-completo/${tipo}`);
         this.navCtrl.navigateForward(`/documento-completo/${tipo}`, { animated: true });
       }
-    } else if (tipo === 'APUNTES' || tipo === 'AGENDAS') {
-      this.navCtrl.navigateForward(`/solo-datos/${tipo}`, { animated: true });
+    } else if (tipo === 'APUNTES' || tipo === 'AGENDA') {
+      //this.navCtrl.navigateForward(`/solo-datos/${tipo}`, { animated: true });
+      const ruta = `/solo-datos/${tipo}`;
+      console.log(`[REDIRECCIÓN] ${ruta}`);
+      this.navCtrl.navigateForward(ruta, { animated: true });
+      
     } else {
       console.warn('Tipo no reconocido:', tipo);
     }

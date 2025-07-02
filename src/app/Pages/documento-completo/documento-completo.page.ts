@@ -24,8 +24,10 @@ import {
   IonCardContent
 } from '@ionic/angular/standalone';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
+
+import { DocumentService } from '../../services/document.service';  // Importa el servicio real
 
 interface Documento {
   id: number;
@@ -34,8 +36,8 @@ interface Documento {
   content: string;
   event_datetime?: string;
   created_at: string;
-  pdfFile?: string;   // si usas pdf
-  imageFile?: string; // si usas imagen
+  pdfFile?: string;
+  imageFile?: string;
 }
 
 @Component({
@@ -74,27 +76,31 @@ export class DocumentoCompletoPage implements OnInit {
   listData: Documento[] = [];
   filteredListData: Documento[] = [];
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private documentService: DocumentService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    // this.tipo = this.route.snapshot.paramMap.get('tipo') ?? '';
-    //this.tipo = this.route.snapshot.params['tipo'] ?? '';
-    //this.cargarDatos();
     this.route.params.subscribe(params => {
       this.tipo = params['tipo'] ?? '';
       this.cargarDatos();
     });
   }
 
-  cargarDatos() {
-    this.listData = [
-      { id: 1, title: 'Apunte de clase', type: 'APUNTE', content: 'Contenido del apunte...', created_at: new Date().toISOString() },
-      { id: 2, title: 'Agenda semanal', type: 'AGENDAS', content: 'Reunión de equipo...', event_datetime: new Date().toISOString(), created_at: new Date().toISOString() },
-      { id: 3, title: 'Manual de usuario', type: 'MANUALES', content: 'Contenido del manual...', created_at: new Date().toISOString() }
-    ];
-
-    // Filtramos solo los documentos que coincidan con el tipo de la ruta
-    this.filteredListData = this.listData.filter(doc => doc.type === this.tipo);
+  async cargarDatos() {
+    try {
+      // Obtiene todos los documentos desde el servicio
+      const allDocs = await this.documentService.getAllDocuments();
+      // Filtra por tipo
+      this.listData = allDocs.filter(doc => doc.type === this.tipo);
+      this.filteredListData = [...this.listData];
+    } catch (error) {
+      console.error('Error cargando documentos:', error);
+      this.listData = [];
+      this.filteredListData = [];
+    }
   }
 
   filterDocuments(event: any) {
@@ -110,17 +116,21 @@ export class DocumentoCompletoPage implements OnInit {
   }
 
   addDocument() {
-    alert('Solo puede realizar esta accion un Instructor');
+    this.router.navigate(['/add-document', { tipo: this.tipo, data: '0' }]);
   }
 
   editDocument(item: Documento) {
-    alert(`Editar documento ${item.id} (implementa la lógica real aquí)`);
+    this.router.navigate(['/add-document', { tipo: this.tipo, data: item.id.toString() }]);
   }
 
-  deleteDocument(id: number) {
+  async deleteDocument(id: number) {
     if (confirm('¿Está seguro de eliminar este documento?')) {
-      this.listData = this.listData.filter(item => item.id !== id);
-      this.filteredListData = this.filteredListData.filter(item => item.id !== id);
+      try {
+        await this.documentService.deleteDocument(id);
+        await this.cargarDatos(); // recarga la lista después de eliminar
+      } catch (error) {
+        console.error('Error al eliminar documento:', error);
+      }
     }
   }
 

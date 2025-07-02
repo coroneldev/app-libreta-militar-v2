@@ -6,36 +6,49 @@
     <ion-title>{{ tipo }}</ion-title>
   </ion-toolbar>
   <ion-toolbar color="light">
-    <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterDocuments($event)" placeholder="Buscar..."></ion-searchbar>
+    <ion-searchbar
+      [(ngModel)]="searchQuery"
+      (ionInput)="filterDocuments($event)"
+      placeholder="Buscar..."
+      debounce="300"
+    ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content color="light">
-  <p *ngIf="filteredListData?.length === 0" class="ion-text-center" style="padding: 15px">
+  <p *ngIf="filteredListData.length === 0" class="ion-text-center" style="padding: 15px;">
     No se encontraron resultados. Puedes agregar uno nuevo registrándolo.
-    Presiona el botón en la parte inferior con el ícono ➕.
     <br /><br />
-    <ion-button (click)="addDocument()" color="success">Crear nuevo</ion-button>
+    <ion-button (click)="addDocument()" color="success" expand="block">
+      Crear nuevo
+    </ion-button>
   </p>
 
   <ion-list [inset]="true">
     <ion-item-sliding *ngFor="let item of filteredListData; trackBy: trackById">
-      <ion-item *ngIf="item.type === 'MANUALES'">
+      <ion-item>
         <ion-label>
           <h2>{{ item.title }}</h2>
           <p>{{ item.content }}</p>
-          <p>📝 Registrado: {{ item.created_at | date: 'dd MMMM yyyy h:mm a' }}</p>
+          <p *ngIf="item.created_at">📝 Registrado: {{ item.created_at | date: 'dd MMMM yyyy h:mm a' }}</p>
+          <p *ngIf="item.event_datetime">📅 Evento: {{ item.event_datetime | date: 'dd MMMM yyyy h:mm a' }}</p>
         </ion-label>
 
-        <!-- Imagen (si existe) -->
-        <img *ngIf="item.imageFile" [src]="item.imageFile" alt="Imagen del manual" 
+        <!-- Imagen -->
+        <img *ngIf="item.imageFile" [src]="item.imageFile" alt="Imagen del documento" 
              style="max-width: 100px; max-height: 100px; margin-left: 10px; border-radius: 6px;" />
       </ion-item>
 
-      <!-- PDF (si existe) -->
-      <ion-card *ngIf="item.type === 'MANUALES' && item.pdfFile" style="margin: 10px;">
+      <!-- PDF -->
+      <ion-card *ngIf="item.pdfFile" style="margin: 10px;">
         <ion-card-content>
-          <iframe [src]="item.pdfFile | safeUrl" width="100%" height="250px" frameborder="0"></iframe>
+          <iframe
+            [src]="item.pdfFile | safeUrl"
+            width="100%"
+            height="250px"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
         </ion-card-content>
       </ion-card>
 
@@ -55,4 +68,5 @@
       <ion-icon name="add-sharp"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  
 </ion-content>

@@ -51,17 +51,19 @@ export class AddDocumentPage implements OnInit, OnDestroy {
     private toastController: ToastController
   ) { }
 
-ngOnInit() {
-  this.routeSub = this.activatedRoute.params.subscribe(async (params: Params) => {
-    this.tipo = params['tipo']?.toUpperCase() === 'AGENDAS' ? 'AGENDA' : params['tipo'];
-    this.data = params['data'];
-    if (this.data !== '0') {
-      await this.loadDocumentData();
-    } else {
-      this.initForm();
-    }
-  });
-}
+  ngOnInit() {
+    this.routeSub = this.activatedRoute.params.subscribe(async (params: Params) => {
+      // this.tipo = params['tipo']?.toUpperCase() === 'AGENDA' ? 'AGENDA' : params['tipo'];
+      this.tipo = params['tipo'];
+
+      this.data = params['data'];
+      if (this.data !== '0') {
+        await this.loadDocumentData();
+      } else {
+        this.initForm();
+      }
+    });
+  }
 
 
   ngOnDestroy() {
@@ -78,11 +80,15 @@ ngOnInit() {
       pdfFile: [data?.pdfFile || '']
     });
 
-    this.filePreview = data?.imageFile?.startsWith('data:image') ? data.imageFile : null;
+    this.imagePreview = data?.imageFile || null;
     this.imageFilePath = data?.imageFile || null;
+
+    this.pdfUri = data?.pdfFile || null;
     this.pdfFilePath = data?.pdfFile || null;
-    this.fileUri = null;
+
+    this.fileUri = null; // opcional
   }
+
 
   private async loadDocumentData() {
     try {
@@ -117,12 +123,21 @@ ngOnInit() {
 
       await this.presentToast(`Documento ${this.data === '0' ? 'registrado' : 'actualizado'} correctamente`);
 
-      if (this.tipo === 'AGENDAS') {
+      if (this.tipo === 'AGENDA') {
         await this.scheduleNotification();
       }
+      if (this.tipo === 'MANUALES') {
+        console.log('Guardado manual, redirigir a vista específica de manuales (implementación futura)');
+        this.navCtrl.navigateBack(`/documento-completo/${this.tipo}`);
 
-      // Redirección correcta a la lista de este tipo:
-      this.navCtrl.navigateBack(`/documento-completo/${this.tipo}`);
+      } else {
+        // Redirección correcta a la lista de este tipo:
+        // this.navCtrl.navigateBack(`/documento-completo/${this.tipo}`);
+        this.navCtrl.navigateBack(`/solo-datos/${this.tipo}`);
+      }
+
+
+
 
     } catch (error) {
       console.error('Error al guardar el documento:', error);

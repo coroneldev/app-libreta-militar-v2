@@ -12,6 +12,7 @@
   <div class="bg">
     <br />
     <ion-grid [fixed]="true">
+
       <ion-row>
         <ion-col size="4" class="ion-col-4">
           <img src="assets/soldado.png" />
@@ -22,9 +23,7 @@
           <ion-text color="light" style="font-style: italic; margin-top: 5px; display: block;">
             Rol: <strong>{{ userRole }}</strong>
           </ion-text>
-
         </ion-col>
-
       </ion-row>
 
       <ion-row>
@@ -32,7 +31,6 @@
           <ion-card mode="ios">
             <ion-card-content>
               <ion-list>
-
                 <!-- Opciones para ESTUDIANTE -->
                 <ng-container *ngIf="userRole === 'ESTUDIANTE'">
                   <ion-item (click)="Seleccionar('APUNTES')">
@@ -42,11 +40,11 @@
                     <ion-label>APUNTES</ion-label>
                   </ion-item>
 
-                  <ion-item (click)="Seleccionar('AGENDAS')">
+                  <ion-item (click)="Seleccionar('AGENDA')">
                     <ion-thumbnail slot="start">
                       <ion-icon name="calendar-number-sharp" class="text-zise"></ion-icon>
                     </ion-thumbnail>
-                    <ion-label>AGENDAS</ion-label>
+                    <ion-label>AGENDA</ion-label>
                   </ion-item>
 
                   <ion-item lines="none" (click)="Seleccionar('MANUALES')">
@@ -76,12 +74,12 @@
   </div>
 
   <!-- FAB (solo para ESTUDIANTE, si aplica) -->
-  <ion-fab *ngIf="userRole === 'ESTUDIANTE'" #fab slot="fixed" vertical="bottom" horizontal="end">
+  <!--<ion-fab *ngIf="userRole === 'ESTUDIANTE'" #fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="success">
       <ion-icon name="add-sharp"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="success" (click)="addDocument('AGENDAS')">
+      <ion-fab-button color="success" (click)="addDocument('AGENDA')">
         <ion-icon name="calendar-number-sharp"></ion-icon>
       </ion-fab-button>
       <ion-fab-button color="success" (click)="addDocument('APUNTES')">
@@ -91,6 +89,6 @@
         <ion-icon name="newspaper-sharp"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
-  </ion-fab>
+  </ion-fab>-->
   
 </ion-content>

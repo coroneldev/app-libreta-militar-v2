@@ -23,7 +23,7 @@ export const routes: Routes = [
   },
   
   {
-    path: 'solo-datos/:tipo', // SOLO para APUNTES y AGENDAS
+    path: 'solo-datos/:tipo', // SOLO para APUNTES y AGENDA
     loadComponent: () =>
       import('./Pages/solo-datos/solo-datos.page').then(
         (m) => m.SoloDatosPage

@@ -26,7 +26,6 @@ import {
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
-
 import { DocumentService } from '../../services/document.service';
 
 interface Documento {
@@ -38,7 +37,7 @@ interface Documento {
   created_at: string;
   pdfFile?: string;
   imageFile?: string;
-  ownerRole?: string;  // <-- Propiedad agregada para saber quién lo creó
+  ownerRole?: string;
 }
 
 @Component({
@@ -77,7 +76,6 @@ export class DocumentoCompletoPage implements OnInit {
   searchQuery: string = '';
   listData: Documento[] = [];
   filteredListData: Documento[] = [];
-
   rolUsuario: string = '';
 
   constructor(
@@ -92,33 +90,23 @@ export class DocumentoCompletoPage implements OnInit {
 
     this.route.params.subscribe(params => {
       this.tipo = params['tipo'] ?? '';
-      this.rutaRetorno = `/documento-completo/${this.tipo}`; // para back-button con fallback
+      this.rutaRetorno = `/documento-completo/${this.tipo}`;
       this.cargarDatos();
     });
   }
 
-async cargarDatos() {
-  try {
-    const allDocs = await this.documentService.getAllDocuments();
-
-    if (this.rolUsuario === 'ESTUDIANTE') {
-      // Mostrar solo los documentos tipo MANUALES
-     // this.listData = allDocs.filter(doc => doc.type === 'MANUALES');
+  async cargarDatos() {
+    try {
+      const allDocs = await this.documentService.getAllDocuments();
       this.listData = allDocs.filter(doc => doc.type === this.tipo);
-    } else {
-      // Para otros roles, mostrar todos los documentos del tipo actual
-      this.listData = allDocs.filter(doc => doc.type === this.tipo);
+      this.filteredListData = [...this.listData];
+      console.log('Documentos cargados (filtrados):', this.listData);
+    } catch (error) {
+      console.error('Error cargando documentos:', error);
+      this.listData = [];
+      this.filteredListData = [];
     }
-
-    this.filteredListData = [...this.listData];
-    console.log('Documentos cargados (filtrados):', this.listData);
-  } catch (error) {
-    console.error('Error cargando documentos:', error);
-    this.listData = [];
-    this.filteredListData = [];
   }
-}
-
 
   filterDocuments(event: any) {
     const query = event.target.value?.toLowerCase() || '';
@@ -131,27 +119,20 @@ async cargarDatos() {
   }
 
   addDocument() {
-    if (this.rolUsuario !== 'ESTUDIANTE') {
-      this.router.navigate(['/add-document', this.tipo, '0']);
-    }
-    // No navega ni hace nada si es estudiante
+    this.router.navigate(['/add-document', this.tipo, '0']);
   }
 
   editDocument(item: Documento) {
-    if (this.rolUsuario !== 'ESTUDIANTE') {
-      this.router.navigate(['/add-document', { tipo: this.tipo, data: item.id.toString() }]);
-    }
+    this.router.navigate(['/add-document', { tipo: this.tipo, data: item.id.toString() }]);
   }
 
   async deleteDocument(id: number) {
-    if (this.rolUsuario !== 'ESTUDIANTE') {
-      if (confirm('¿Está seguro de eliminar este documento?')) {
-        try {
-          await this.documentService.deleteDocument(id);
-          await this.cargarDatos();
-        } catch (error) {
-          console.error('Error al eliminar documento:', error);
-        }
+    if (confirm('¿Está seguro de eliminar este documento?')) {
+      try {
+        await this.documentService.deleteDocument(id);
+        await this.cargarDatos();
+      } catch (error) {
+        console.error('Error al eliminar documento:', error);
       }
     }
   }

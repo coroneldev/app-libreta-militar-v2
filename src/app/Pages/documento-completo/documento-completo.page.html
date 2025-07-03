@@ -32,7 +32,7 @@
   <p *ngIf="filteredListData.length === 0" class="ion-text-center" style="padding: 15px;">
     No se encontraron resultados. Puedes agregar uno nuevo registrándolo.
     <br /><br />
-    <ion-button (click)="addDocument()" color="success" expand="block" *ngIf="rolUsuario !== 'ESTUDIANTE'">
+    <ion-button (click)="addDocument()" color="success" expand="block">
       Crear nuevo
     </ion-button>
   </p>
@@ -68,10 +68,10 @@
 
       <!-- Opciones -->
       <ion-item-options side="end">
-        <ion-item-option color="primary" (click)="editDocument(item)" *ngIf="rolUsuario !== 'ESTUDIANTE'">
+        <ion-item-option color="primary" (click)="editDocument(item)">
           <ion-icon slot="icon-only" name="create-outline"></ion-icon>
         </ion-item-option>
-        <ion-item-option color="danger" (click)="deleteDocument(item.id)" *ngIf="rolUsuario !== 'ESTUDIANTE'">
+        <ion-item-option color="danger" (click)="deleteDocument(item.id)">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-item-option>
       </ion-item-options>
@@ -79,7 +79,7 @@
   </ion-list>
 
   <!-- Botón flotante para agregar nuevo documento -->
-  <ion-fab *ngIf="rolUsuario !== 'ESTUDIANTE'" slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="success" (click)="addDocument()">
       <ion-icon name="add-sharp"></ion-icon>
     </ion-fab-button>
